@@ -91,6 +91,8 @@ This is an E-commerce web app for online shopping.
 
 
 We are students of [PowerLearnProject](https://) 2022 cohort. We are currently working as a Team. With our exquisite team of experienced designers and developers, we were able to create a platform that enables users to buy and sell. We hope our project helps you in your coding journey :v::blush::crossed_fingers:
+
+
 Name: Japheth Achimba.
 Email address: japhethachimba@gmail.com
 
