@@ -95,6 +95,10 @@ We are students of [PowerLearnProject](https://) 2022 cohort. We are currently w
 
 Name: Japheth Achimba.
 Email address: japhethachimba@gmail.com
+Name: Olaniyan Daniel Olusegun
+Email address: danielolaniyan1@gmail.com
+Name: Vigilance Wanjala
+Email address: vigysonje04@gmail.com
 
 
 
