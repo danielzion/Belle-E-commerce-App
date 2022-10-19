@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+Wishlist &ndash; Belle
+{% endblock %}
+
+{% block minicart %}
+<div class="col-4 col-sm-3 col-md-3 col-lg-2">
+    <div class="site-cart">
+        <a href="#;" class="site-header__cart" title="Cart">
+            <i class="icon anm anm-bag-l"></i>
+            <span id="CartCount" class="site-header__cart-count" data-cart-render="item_count">{{ forloop.counter }}</span>
+        </a>
+        <!--Minicart Popup-->
+        <div id="header-cart" class="block block-cart">
+            <ul class="mini-products-list">
+                {% for cart in carts %}
+                <li class="item">
+                    <a class="product-image" href="#">
+                        <img src="{{cart.item.get_image}}" alt="{{cart.item.title}}" title="{{cart.item.title}}" />
+                    </a>
+                    <div class="product-details">
+                        <a href="{% url 'cart:delete_cart' cart.item.slug %}" class="remove"><i class="anm anm-times-l" aria-hidden="true"></i></a>
+                        <a href="#" class="edit-i remove"><i class="anm anm-edit" aria-hidden="true"></i></a>
+                        <a class="pName" href="{% url 'cart:home' %}">{{ cart.item.title  }}</a>
+                        <div class="variant-cart">{{ cart.colour}} / {{ cart.size}}</div>
+                        <div class="wrapQtyBtn">
+                            <div class="qtyField">
+                                <span class="label">Qty:</span>
+                                <a class="qtyBtn minus" href="javascript:void(0);"><i class="fa anm anm-minus-r" aria-hidden="true"></i></a>
+                                <input type="text" id="Quantity" name="quantity" value="{{cart.quantity}}" class="product-form__input qty">
+                                <a class="qtyBtn plus" href="javascript:void(0);"><i class="fa anm anm-plus-r" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <div class="priceRow">
+                            <div class="product-price">
+                                <span class="money">$ {{cart.item.price}}</span>
+                            </div>
+                         </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="total">
+                <div class="total-in">
+                    <span class="label">Cart Subtotal:</span><span class="product-price"><span class="money">$</span></span>
+                </div>
+                 <div class="buttonSet text-center">
+                    <a href="{% url 'cart:home' %}" class="btn btn-secondary btn--small">View Cart</a>
+                    <a href="{% url 'pages:checkout' %}" class="btn btn-secondary btn--small">Checkout</a>
+                </div>
+            </div>
+        </div>
+        <!--End Minicart Popup-->
+    </div>
+    <div class="site-header__search">
+        <button type="button" class="search-trigger"><i class="icon anm anm-search-l"></i></button>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+    <!--Body Content-->
+        <div id="page-content">
+            <!--Page Title-->
+            <div class="page section-header text-center">
+                <div class="page-title">
+                    <div class="wrapper"><h1 class="page-width">Wish List</h1></div>
+                  </div>
+            </div>
+        
+        <div class="container">
+            
+        	<div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
+                	<form action="#">
+                        <div class="wishlist-table table-content table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                    	<th class="product-name text-center alt-font">Remove</th>
+                                        <th class="product-price text-center alt-font">Images</th>
+                                        <th class="product-name alt-font">Product</th>
+                                        <th class="product-price text-center alt-font">Unit Price</th>
+                                        <th class="stock-status text-center alt-font">Stock Status</th>
+                                        <th class="product-subtotal text-center alt-font">Add to Cart</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for wishlist in wishlists %}
+                                    <tr>
+                                        <td class="product-remove text-center" valign="middle"><a href="#"><i class="icon icon anm anm-times-l"></i></a></td>
+                                        <td class="product-thumbnail text-center">
+                                            <a href="#"><img src="{{ wishlist.get_image }}" alt="{{ wishlist.title }}" title="{{ wishlist.title }}" /></a>
+                                        </td>
+                                        <td class="product-name"><h4 class="no-margin"><a href="#">{{ wishlist.title }}</a></h4></td>
+                                        <td class="product-price text-center"><span class="amount">{{ wishlist.price }}</span></td>
+                                        <td class="stock text-center">
+                                            <span class="in-stock">{{ wishlist.stock }}</span>
+                                        </td>
+                                        <td class="product-subtotal text-center">
+                                            <a href="{{ wishlist.get_add_to_cart_url }}">
+                                                <button type="button" class="btn btn-small">Add To Cart</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>                   
+               	</div>
+            </div>
+        </div>
+        
+    </div>
+    <!--End Body Content-->
+    {% endblock %}

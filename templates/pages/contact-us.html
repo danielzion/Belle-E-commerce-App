@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block title %}
 Contact Us &ndash; Belle
@@ -8,15 +8,7 @@ Contact Us &ndash; Belle
 {% block content %}
     
     <!--Body Content-->
-    <div id="page-content">
-          	<!--Page Title-->
-            <div id="page-content">
-              <!--Page Title-->
-              <div class="page section-header text-center">
-                  <div class="page-title">
-                      <div class="wrapper"><h1 class="page-width"></h1></div>
-                    </div>
-              </div>
+
     	<!--Page Title-->
     	<div class="page section-header text-center">
 			<div class="page-title">
@@ -29,7 +21,7 @@ Contact Us &ndash; Belle
         </div>
         <div class="bredcrumbWrap">
             <div class="container breadcrumbs">
-                <a href="index.html" title="Back to the home page">Home</a><span aria-hidden="true">›</span><span>Contact Us</span>
+                <a href="{% url 'index' %}" title="Back to the home page">Home</a><span aria-hidden="true">›</span><span>Contact Us</span>
             </div>
         </div>
         

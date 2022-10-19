@@ -1,12 +1,67 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}
 Belle E-commerce Store - Blog
 {% endblock %}
 
-{% block content %}
+{% block minicart %}
+<div class="col-4 col-sm-3 col-md-3 col-lg-2">
+    <div class="site-cart">
+        <a href="#;" class="site-header__cart" title="Cart">
+            <i class="icon anm anm-bag-l"></i>
+            <span id="CartCount" class="site-header__cart-count" data-cart-render="item_count">{{ forloop.counter }}</span>
+        </a>
+        <!--Minicart Popup-->
+        <div id="header-cart" class="block block-cart">
+            <ul class="mini-products-list">
+                {% for cart in carts %}
+                <li class="item">
+                    <a class="product-image" href="#">
+                        <img src="{{cart.item.get_image}}" alt="{{cart.item.title}}" title="{{cart.item.title}}" />
+                    </a>
+                    <div class="product-details">
+                        <a href="{% url 'cart:delete_cart' cart.item.slug %}" class="remove"><i class="anm anm-times-l" aria-hidden="true"></i></a>
+                        <a href="#" class="edit-i remove"><i class="anm anm-edit" aria-hidden="true"></i></a>
+                        <a class="pName" href="{% url 'cart:home' %}">{{ cart.item.title  }}</a>
+                        <div class="variant-cart">{{ cart.colour}} / {{ cart.size}}</div>
+                        <div class="wrapQtyBtn">
+                            <div class="qtyField">
+                                <span class="label">Qty:</span>
+                                <a class="qtyBtn minus" href="javascript:void(0);"><i class="fa anm anm-minus-r" aria-hidden="true"></i></a>
+                                <input type="text" id="Quantity" name="quantity" value="{{cart.quantity}}" class="product-form__input qty">
+                                <a class="qtyBtn plus" href="javascript:void(0);"><i class="fa anm anm-plus-r" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <div class="priceRow">
+                            <div class="product-price">
+                                <span class="money">$ {{cart.item.price}}</span>
+                            </div>
+                         </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="total">
+                <div class="total-in">
+                    <span class="label">Cart Subtotal:</span><span class="product-price"><span class="money">$</span></span>
+                </div>
+                 <div class="buttonSet text-center">
+                    <a href="{% url 'cart:home' %}" class="btn btn-secondary btn--small">View Cart</a>
+                    <a href="{% url 'pages:checkout' %}" class="btn btn-secondary btn--small">Checkout</a>
+                </div>
+            </div>
+        </div>
+        <!--End Minicart Popup-->
+    </div>
+    <div class="site-header__search">
+        <button type="button" class="search-trigger"><i class="icon anm anm-search-l"></i></button>
+    </div>
+</div>
+{% endblock %}
 
+
+{% block content %}
     
     <!--Body Content-->
     <div id="page-content">
@@ -20,7 +75,7 @@ Belle E-commerce Store - Blog
 	    <div class="bredcrumbWrap">
             <div class="container breadcrumbs">
                 <a href="{% url 'index' %}" title="Back to the home page">Home</a><span aria-hidden="true">›</span>
-                <a href="blog-left-sidebar.html" title="Back to News">News</a><span aria-hidden="true">›</span><span>Blog Article</span>
+                <a href="{% url 'blog:home' %}" title="Back to News">Blog</a><span aria-hidden="true">›</span><span>Blog Article</span>
             </div>
         </div>
         <div class="container">
@@ -30,19 +85,30 @@ Belle E-commerce Store - Blog
                     <div class="blog--list-view">
                     	<div class="article"> 
                             <!-- Article Image --> 
-                             <a class="article_featured-image" href="{{post.images.url}}"><img class="blur-up lazyload" data-src="{{post.get_image}}" src="{{post.get_image}}" alt="{{ post.title }}"></a> 
-                            <h1><a href="blog-left-sidebar.html">{{post.title}}</a></h1>
+                            <a class="article_featured-image" href="{{post.images.url}}"><img class="blur-up lazyload" data-src="{{post.get_image}}" src="{{post.get_image}}" alt="{{ post.title }}"></a> 
+                            <h2 class="h3"><a href="#">{{post.title}}</a></h2>
                             <ul class="publish-detail">                      
-                                <li><i class="anm anm-user-al" aria-hidden="true"></i>  {{ post.author }}</li>
-                                <li><i class="icon anm anm-clock-r"></i> <time datetime="2017-05-02">{{ post.date_posted | date:"M d,  Y" }}</time></li>
+                                <li><i class="anm anm-user-al" aria-hidden="true"></i>  {{ post.author }} </li>
+                                <li><i class="icon anm anm-clock-r"></i> <time datetime="{{ post.date_posted | date:"M d,  Y" }}">{{ post.date_posted | date:"M d,  Y" }}</time></li>
                                 <li>
                                     <ul class="inline-list">   
-                                        <li><i class="icon anm anm-comments-l"></i> <a href="#"> 0 comments</a></li>
+                                        <li><i class="icon anm anm-comments-l"></i> <a href="#"> {{ post.number_of_comments }} comments</a></li>
                                     </ul>
                                 </li>
                             </ul>
                             <div class="rte"> 
-                              {{post.description}}
+                                <p>On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de distractions, et empêche de se concentrer sur la mise en page elle-même. L'avantage du Lorem Ipsum sur un texte générique comme 'Du texte. Du texte. Du texte.' est qu'il possède une distribution de lettres plus ou moins normale, et en tout cas comparable avec celle du français standard. De nombreuses suites logicielles de.</p>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                <h3>Sample Text Listing</h3>
+                                <ul class="list-items">
+                                	<li>Donec et lacus mattis ipsum feugiat interdum non id sapien.</li>
+                                    <li>Quisque et mauris eget nisi vestibulum rhoncus molestie a ante.</li>
+                                    <li>Curabitur pulvinar ex at tempus sodales.</li>
+                                    <li>Mauris efficitur magna quis lectus lobortis venenatis.</li>
+                                    <li>Nunc id enim eget augue molestie lobortis in a purus.</li>
+                                </ul>
+                                <h3>Donec maximus quam at lectus bibendum, non suscipit nunc tristique.</h3>
+                                <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>
                             </div>
                             <hr/>
                             <div class="social-sharing">
@@ -73,35 +139,55 @@ Belle E-commerce Store - Blog
                                 </div>
                             </div>
                         </div>
+
+                        <h3> Comments <h3>
+                            {% if comments %}
+                            {% for com in comments %}
+                            <div class="row">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                  <p class="fine-print">{{ com.content }}</p>
+                              </div>
+                            </div>
+                                <small>{{com.author}}</small>
+                                <hr>
+                            {% endfor %}
+                        {% else %}
+                        <div class="alert alert-secondary" role="alert">
+                            No comment yet add one ..
+                        </div>
+                        {% endif %}
+    
                         <div class="formFeilds contact-form form-vertical">
-                          <form method="post" action="#" id="comment_form" accept-charset="UTF-8" class="comment-form">
-                              <h2>Leave a comment</h2>
-                              <div class="row">
+                            {% if user is not None %}
+                            <form method="post" action="#" id="comment_form" accept-charset="UTF-8" class="comment-form">
+                                {% csrf_token %}  
+                                <h2>Leave a comment</h2>
+                                <div class="row">
                                 <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                    <input type="text" id="ContactFormName" name="contact[name]" placeholder="Name" value="" required="">
+                                        {{ form.name }}
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                    <input type="email" id="ContactFormEmail" name="contact[email]" placeholder="Email" value="" required="">                        	
+                                        {{ form.email }}
                                     </div>
                                 </div>
                               </div>
                               <div class="row">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                    <textarea required="" rows="10" id="ContactFormMessage" name="contact[body]" placeholder="Your Message"></textarea>
-                                    </div>
+                                        {{ form.content }}
+                                </div>
                                 </div>  
                               </div>
                               <div class="row">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <p class="fine-print">Please note, comments must be approved before they are published</p>
                                     <input type="submit" class="btn" value="Send Message">
                                 </div>
                              </div>
                          </form>
+                         {% endif %}
                         </div>
                     </div>
                 </div>
@@ -113,11 +199,9 @@ Belle E-commerce Store - Blog
                             <div class="widget-title"><h2>Category</h2></div>
                             <div class="widget-content">
                                 <ul class="sidebar_categories">
-                                	<li class="lvl-1 "><a href="http://annimexweb.com/" class="site-nav lvl-1">Beauty</a></li>
-                                    <li class="lvl-1  active"><a href="#" class="site-nav lvl-1">fashion</a></li>
-                                    <li class="lvl-1 "><a href="#" class="site-nav lvl-1">summer</a></li>
-                                    <li class="lvl-1 "><a href="#" class="site-nav lvl-1">trend</a></li>
-                                    <li class="lvl-1 "><a href="#" class="site-nav lvl-1">winter</a></li>
+                                	{% for category in post_categories %}
+                                	<li class="lvl-1 "><a href="#" class="site-nav lvl-1">{{ category }}</a></li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                         </div>
@@ -126,42 +210,23 @@ Belle E-commerce Store - Blog
 							<div class="widget-content">
                                 <div class="list list-sidebar-products">
                                   <div class="grid">
+                                    {% for recent_post in recent_posts %}
                                     <div class="grid__item">
                                       <div class="mini-list-item">
                                         <div class="mini-view_image">
                                             <a class="grid-view-item__link" href="#">
-                                                <img class="grid-view-item__image blur-up lazyload" data-src="assets/images/blog/blog-post-sml-1.jpg" src="assets/images/blog/blog-post-sml-1.jpg" alt="" />
+                                                <img class="grid-view-item__image blur-up lazyload" data-src="{{recent_post.get_image}}" src="{{recent_post.get_image}}" alt="" />
                                             </a>
                                         </div>
-                                        <div class="details"> <a class="grid-view-item__title" href="#">It's all about how you wear</a>
-                                          <div class="grid-view-item__meta"><span class="article__date"> <time datetime="2017-05-02T14:33:00Z">May 02, 2017</time></span></div>
+                                        <div class="details"> <a class="grid-view-item__title" href="#">{{ recent_post.title }}</a>
+                                          <div class="grid-view-item__meta"><span class="article__date"> <time datetime="2017-05-02T14:33:00Z">{{ recent_post.date_posted | date:"M d,  Y" }}</time></span></div>
                                         </div>
                                       </div>
                                     </div>
-                                    <div class="grid__item">
-                                      <div class="mini-list-item">
-                                        <div class="mini-view_image"> <a class="grid-view-item__link" href="#"><img class="grid-view-item__image blur-up lazyload" data-src="assets/images/blog/blog-post-sml-2.jpg" src="assets/images/blog/blog-post-sml-2.jpg" alt="" /></a> </div>
-                                        <div class="details"> <a class="grid-view-item__title" href="#">27 Days of Spring Fashion Recap</a>
-                                          <div class="grid-view-item__meta"><span class="article__date"> <time datetime="2017-05-02T14:33:00Z">May 02, 2017</time> </span></div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="grid__item">
-                                      <div class="mini-list-item">
-                                        <div class="mini-view_image"> <a class="grid-view-item__link" href="#"><img class="grid-view-item__image blur-up lazyload" data-src="assets/images/blog/blog-post-sml-3.jpg" src="assets/images/blog/blog-post-sml-3.jpg" alt="" /></a> </div>
-                                        <div class="details"> <a class="grid-view-item__title" href="#">How to Wear The Folds Trend Four Ways</a>
-                                          <div class="grid-view-item__meta"><span class="article__date"> <time datetime="2017-05-02T14:14:00Z">May 02, 2017</time> </span></div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="grid__item">
-                                      <div class="mini-list-item">
-                                        <div class="mini-view_image"> <a class="grid-view-item__link" href="#"><img class="grid-view-item__image blur-up lazyload" data-src="assets/images/blog/blog-post-sml-4.jpg" src="assets/images/blog/blog-post-sml-4.jpg" alt="" /></a> </div>
-                                        <div class="details"> <a class="grid-view-item__title" href="#">Accusantium doloremque</a>
-                                          <div class="grid-view-item__meta"><span class="article__date"> <time datetime="2017-05-02T14:12:00Z">May 02, 2017</time> </span></div>
-                                        </div>
-                                      </div>
-                                    </div>
+                                    {% endfor %}
+
+
+
                                   </div>
                                 </div>
                           	</div>
@@ -169,51 +234,7 @@ Belle E-commerce Store - Blog
                         <div class="sidebar_widget static-banner">
                         	<img src="assets/images/side-banner-2.jpg" alt="">
                         </div>
-						<div class="sidebar_widget">
-                        	<div class="widget-title"><h2>Trending Now</h2></div>
-							<div class="widget-content">
-                                <div class="list list-sidebar-products">
-                                  <div class="grid">
-                                    <div class="grid__item">
-                                      <div class="mini-list-item">
-                                        <div class="mini-view_image">
-                                            <a class="grid-view-item__link" href="#">
-                                                <img class="grid-view-item__image blur-up lazyload" data-src="assets/images/product-images/mini-product-img.jpg" src="assets/images/product-images/mini-product-img.jpg" alt="" />
-                                            </a>
-                                        </div>
-                                        <div class="details"> <a class="grid-view-item__title" href="#">Cena Skirt</a>
-                                          <div class="grid-view-item__meta"><span class="product-price__price"><span class="money">$173.60</span></span></div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="grid__item">
-                                      <div class="mini-list-item">
-                                        <div class="mini-view_image"> <a class="grid-view-item__link" href="#"><img class="grid-view-item__image blur-up lazyload" data-src="assets/images/product-images/mini-product-img1.jpg" src="assets/images/product-images/mini-product-img1.jpg" alt="" /></a> </div>
-                                        <div class="details"> <a class="grid-view-item__title" href="#">Block Button Up</a>
-                                          <div class="grid-view-item__meta"><span class="product-price__price"><span class="money">$378.00</span></span></div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="grid__item">
-                                      <div class="mini-list-item">
-                                        <div class="mini-view_image"> <a class="grid-view-item__link" href="#"><img class="grid-view-item__image blur-up lazyload" data-src="assets/images/product-images/mini-product-img2.jpg" src="assets/images/product-images/mini-product-img2.jpg" alt="" /></a> </div>
-                                        <div class="details"> <a class="grid-view-item__title" href="#">Balda Button Pant</a>
-                                          <div class="grid-view-item__meta"><span class="product-price__price"><span class="money">$278.60</span></span></div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="grid__item">
-                                      <div class="mini-list-item">
-                                        <div class="mini-view_image"> <a class="grid-view-item__link" href="#"><img class="grid-view-item__image blur-up lazyload" data-src="assets/images/product-images/mini-product-img3.jpg" src="assets/images/product-images/mini-product-img3.jpg" alt="" /></a> </div>
-                                        <div class="details"> <a class="grid-view-item__title" href="#">Border Dress in Black/Silver</a>
-                                          <div class="grid-view-item__meta"><span class="product-price__price"><span class="money">$228.00</span></span></div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                          	</div>
-						</div>
+						
                     </div>
                 </div>
                 <!--End Sidebar-->
