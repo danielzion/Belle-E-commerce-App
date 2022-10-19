@@ -18,7 +18,32 @@ def BlogView(request):
     posts = Blog.objects.all().order_by('date_posted')
     recent_posts = posts[0:5]
     post_categories = BlogCategory.objects.all()
-    return render(request,'blog/home.html', {'posts':posts, 'post_categories': post_categories, 'recent_posts' : recent_posts, })
+
+    return render(request, 'blog/home.html', {'posts':posts, 'post_categories': post_categories, 'recent_posts' : recent_posts})
+
+class BlogDetailView(DetailView):
+    model = Blog
+    template_name = 'blog/blog_detail.html'
+    context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        posts = Blog.objects.all().order_by('date_posted')
+        data = super().get_context_data(**kwargs)
+        comments_connected = Comment.objects.filter(post_connected=self.get_object()).order_by('-date_posted')
+        post_categories = BlogCategory.objects.all()
+        data['comments'] = comments_connected
+        data['form'] = NewCommentForm(instance=self.request.user)
+        data['post_categories'] = post_categories
+        data['recent_posts'] = posts[0:5]
+        return data
+
+    def post(self, request, *args, **kwargs):
+        new_comment = Comment(content=request.POST.get('content'),
+                              author=self.request.user,
+                              post_connected=self.get_object())
+        new_comment.save()
+
+        return self.get(self, request, *args, **kwargs)
 
 
 class BlogListView(LoginRequiredMixin, ListView):
@@ -39,27 +64,6 @@ class BlogListView(LoginRequiredMixin, ListView):
         return Blog.objects.filter(category=category)
 
 
-
-
-class BlogDetailView(DetailView):
-    model = Blog
-    template_name = 'blog/blog_detail.html'
-    context_object_name = 'post'
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        comments_connected = Comment.objects.filter(post_connected=self.get_object()).order_by('-date_posted')
-        data['comments'] = comments_connected
-        data['form'] = NewCommentForm(instance=self.request.user)
-        return data
-
-    def post(self, request, *args, **kwargs):
-        new_comment = Comment(content=request.POST.get('content'),
-                              author=self.request.user,
-                              post_connected=self.get_object())
-        new_comment.save()
-
-        return self.get(self, request, *args, **kwargs)
 
 class BlogDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Blog

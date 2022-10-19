@@ -15,8 +15,8 @@ class Blog(models.Model):
     # likes= models.IntegerField(default=0)
     # dislikes= models.IntegerField(default=0)
       
-    def __str__(self):
-        return self.title
+    # def __str__(self):
+    #     return self.title
 
     @property
     def number_of_comments(self):
@@ -27,6 +27,10 @@ class Blog(models.Model):
             return self.images.url
         else:
             return 'path/to/default/image'
+
+    def __str__(self):
+        return self.title
+    
 
 
 class BlogCategory(models.Model):
@@ -47,6 +51,8 @@ class BlogCategory(models.Model):
 
 class Comment(models.Model):
     content = models.TextField(max_length=150)
+    email = models.EmailField(max_length=150)
+    name = models.CharField(max_length=150)
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     post_connected = models.ForeignKey(Blog, on_delete=models.CASCADE)

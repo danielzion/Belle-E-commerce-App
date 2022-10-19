@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-3lec^3&xz@c0kbi68&z6nmg6eag$_*sp0sjnw_305eui(&w-bl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'blog',
     'pages',
     'shop',
-    'product',
     'cart',
 ]
 
@@ -60,7 +59,7 @@ ROOT_URLCONF = 'belle.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
