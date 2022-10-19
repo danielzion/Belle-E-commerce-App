@@ -15,6 +15,8 @@ This is an E-commerce web app for online shopping.
 ## Documentation
 [Here's a link to the project's documentation]
 
+[Link to Belle Ecommerce Template for the frontend](https://themeforest.net/item/belle-multipurpose-bootstrap-4-html-template/24652217)
+
 ## Tech Stack
 
 **Client:** Javascript, HTML, CSS languages
